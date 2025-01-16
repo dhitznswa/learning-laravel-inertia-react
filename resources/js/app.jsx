@@ -1,10 +1,23 @@
 import "./bootstrap";
 
-import { createInertiaApp } from "@inertiajs/react";
+import { createInertiaApp, router } from "@inertiajs/react";
 import { createRoot } from "react-dom/client";
 import "../css/app.css";
 import MainWraper from "./Components/MainWraper";
 import Layout from "./Layout/Layout";
+import NProgress from "nprogress";
+import "nprogress/nprogress.css";
+
+NProgress.configure({
+    showSpinner: true,
+    template: `<div class="bar" role="bar"><div class="peg"></div></div><div class="spinner" role="spinner"><div class="spinner-icon"></div></div>`,
+});
+
+router.on("start", () => {
+    NProgress.start();
+});
+
+router.on("finish", () => NProgress.done());
 
 createInertiaApp({
     title: (title) => (title ? `${title} - inShowcases` : "inShowcases.com"),
@@ -21,8 +34,5 @@ createInertiaApp({
                 <App {...props} />
             </MainWraper>
         );
-    },
-    progress: {
-        color: "#FFA400",
     },
 });

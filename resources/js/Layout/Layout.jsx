@@ -50,6 +50,8 @@ export default function Layout({ children }) {
                 </div>
             </div>
 
+            <div className="w-full progress-bar"></div>
+
             <main>{children}</main>
         </>
     );

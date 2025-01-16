@@ -38,11 +38,20 @@ class PostController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|min:3',
             'content' => 'required|min:5',
+            'thumbnail' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
+
+        if ($request->hasFile('thumbnail')) {
+            $thumbnail = $request->file('thumbnail');
+            $thumbnail_name = $thumbnail->hashName();
+            $thumbnail->storePubliclyAs('thumbnails', $thumbnail_name, 'public');
+
+            $validatedData['thumbnail'] = $thumbnail_name;
+        }
 
         Post::create($validatedData);
 
-        return redirect()->route('post.index');
+        return redirect()->route('post.index')->with('success', 'Add Post Sukses');
     }
 
     /**
@@ -75,6 +84,8 @@ class PostController extends Controller
             'content' => 'required|min:5',
             'thumbnail' => 'image|mimes:jpeg,png,jpg,gif,svg',
         ]);
+
+        sleep(5);
 
         $post = Post::findOrFail($id);
 
